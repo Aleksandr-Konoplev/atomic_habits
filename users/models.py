@@ -7,11 +7,6 @@ class User(AbstractUser):
     Кастомная модель пользователя
     """
 
-    email: models.EmailField
-    phone_number: models.CharField
-    telegram_id: models.CharField
-    avatar: models.ImageField
-
     username = None
     email = models.EmailField(unique=True, verbose_name='Email')
     phone_number = models.CharField(max_length=20, verbose_name='Номер телефона', blank=True, null=True)
