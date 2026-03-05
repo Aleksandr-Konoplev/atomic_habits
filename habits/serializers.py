@@ -6,3 +6,4 @@ class HabitSerializer(ModelSerializer):
     class Meta:
         model = Habit
         fields = "__all__"
+        read_only_fields = ('owner',)

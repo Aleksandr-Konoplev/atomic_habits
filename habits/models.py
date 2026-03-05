@@ -1,6 +1,8 @@
-from django.core.exceptions import ValidationError
+# from django.core.exceptions import ValidationError
+
 from django.db import models
 from django.utils.text import Truncator
+from rest_framework.exceptions import ValidationError
 
 
 class Habit(models.Model):
@@ -33,14 +35,14 @@ class Habit(models.Model):
     def clean(self):
         super().clean()
 
+        if self.is_pleasant and self.award or self.is_pleasant and self.related_pleasant_habit:
+            raise ValidationError('У приятной привычки не может быть вознаграждения, или приятной привычки')
+
         if self.related_pleasant_habit and self.award:
             raise ValidationError('Можно указать либо связанную приятную привычку, либо награду')
 
-        if self.is_pleasant and self.award:
-            raise ValidationError('У приятной привычки не может быть вознаграждения')
-
         if not self.is_pleasant:
-            if not self.award and self.related_pleasant_habit:
+            if not self.award and not self.related_pleasant_habit:
                 raise ValidationError('У полезной привычки должна быть приятная привычка, или вознаграждение')
 
     def save(self, *args, **kwargs):
