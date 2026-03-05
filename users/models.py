@@ -9,7 +9,7 @@ class User(AbstractUser):
 
     email: models.EmailField
     phone_number: models.CharField
-    citi: models.CharField
+    telegram_id: models.CharField
     avatar: models.ImageField
 
     username = None

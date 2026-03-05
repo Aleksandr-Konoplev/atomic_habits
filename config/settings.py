@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -55,7 +56,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# ----------------------------------------------------------------------------------
 # ---------------------------- Настройки базы данных -------------------------------
 DATABASES = {
     'default': {
@@ -67,10 +67,7 @@ DATABASES = {
         'PORT': os.getenv('PORT'),
     }
 }
-# ----------------------------------------------------------------------------------
 
-# ----------------------------------------------------------------------------------
-# --------------------------- Настройки аутентификации -----------------------------
 # ------------------------- Валидаторы сложности пароля ----------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -88,7 +85,23 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 # ----------------------- Модель аутентификации пользователя -----------------------
 AUTH_USER_MODEL = 'users.User'
-# ----------------------------------------------------------------------------------
+
+# ---------------------------- Глобальные настройки API ----------------------------
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
+
+# ------------------- Настройки время жизни и обновления токена --------------------
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
 
 LANGUAGE_CODE = 'en-us'
 
