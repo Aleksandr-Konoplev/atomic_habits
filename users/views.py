@@ -1,5 +1,6 @@
 from users.models import User
 from users.serializers import UserSerializer
+from users.paginators import UsersPaginator
 from rest_framework.generics import (
     CreateAPIView,
     ListAPIView,
@@ -22,6 +23,7 @@ class UserCreateAPIView(CreateAPIView):
 class UsersListAPIView(ListAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
+    pagination_class = UsersPaginator
 
 
 class UserRetrieveAPIView(RetrieveAPIView):
