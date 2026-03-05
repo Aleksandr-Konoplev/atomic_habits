@@ -74,6 +74,8 @@ class Habit(models.Model):
     )
 
     def clean(self):
+        super().clean()
+
         if self.related_pleasant_habit and self.award:
             raise ValidationError(
                 'Можно указать либо связанную приятную привычку, либо награду'
@@ -89,6 +91,10 @@ class Habit(models.Model):
                 raise ValidationError(
                     'У полезной привычки должна быть приятная привычка, или вознаграждение'
                 )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Привычка'
