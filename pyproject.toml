@@ -52,3 +52,17 @@ exclude = '''
   | .venv
 )/
 '''
+
+[tool.flake8]
+max-line-length = 119
+exclude = [
+    ".git",
+    "__pycache__",
+    "migrations",
+    "venv",
+    ".venv"
+]
+ignore = [
+    "E203",
+    "W503"
+]

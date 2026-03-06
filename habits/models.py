@@ -1,5 +1,3 @@
-# from django.core.exceptions import ValidationError
-
 from django.db import models
 from django.utils.text import Truncator
 from rest_framework.exceptions import ValidationError
@@ -35,7 +33,7 @@ class Habit(models.Model):
     def clean(self):
         super().clean()
 
-        if self.is_pleasant and self.award or self.is_pleasant and self.related_pleasant_habit:
+        if self.is_pleasant and (self.award or self.related_pleasant_habit):
             raise ValidationError('У приятной привычки не может быть вознаграждения, или приятной привычки')
 
         if self.related_pleasant_habit and self.award:
