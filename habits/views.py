@@ -19,12 +19,20 @@ class HabitCreateAPIView(CreateAPIView):
         serializer.save(owner=self.request.user)
 
 
-class HabitListAPIView(ListAPIView):
+class HabitsUserListAPIView(ListAPIView):
     serializer_class = HabitSerializer
     pagination_class = HabitPaginator
 
     def get_queryset(self):
-        return Habit.objects.filter(Q(owner=self.request.user) | Q(is_publicity=True))
+        return Habit.objects.filter(owner=self.request.user)
+
+
+class HabitsPublicListAPIView(ListAPIView):
+    serializer_class = HabitSerializer
+    pagination_class = HabitPaginator
+
+    def get_queryset(self):
+        return Habit.objects.filter(is_publicity=True)
 
 
 class HabitRetrieveAPIView(RetrieveAPIView):
