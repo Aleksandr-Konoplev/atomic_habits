@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'rest_framework_simplejwt',
+    'django_celery_beat',
     # My app
     'users',
     'habits',
@@ -88,6 +89,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 # ----------------------- Модель аутентификации пользователя -----------------------
 AUTH_USER_MODEL = 'users.User'
+# ----------------------------------------------------------------------------------
 
 # ---------------------------- Глобальные настройки API ----------------------------
 REST_FRAMEWORK = {
@@ -99,12 +101,14 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+# ----------------------------------------------------------------------------------
 
 # ------------------- Настройки время жизни и обновления токена --------------------
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
+# ----------------------------------------------------------------------------------
 
 LANGUAGE_CODE = 'en-us'
 
@@ -115,3 +119,12 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+
+# ------------------- Настройки Celery --------------------
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+
+# CELERY_TIMEZONE = TIME_ZONE
+# CELERY_TASK_TRACK_STARTED = True
+# CELERY_TASK_TIME_LIMIT = 30 * 60
+# ---------------------------------------------------------
