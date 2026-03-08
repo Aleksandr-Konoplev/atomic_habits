@@ -1,6 +1,8 @@
 from datetime import timedelta
 from pathlib import Path
 import os
+
+from celery.schedules import crontab
 from dotenv import load_dotenv
 
 
@@ -25,6 +27,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'rest_framework_simplejwt',
+    'django_celery_beat',
     # My app
     'users',
     'habits',
@@ -88,6 +91,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 # ----------------------- Модель аутентификации пользователя -----------------------
 AUTH_USER_MODEL = 'users.User'
+# ----------------------------------------------------------------------------------
 
 # ---------------------------- Глобальные настройки API ----------------------------
 REST_FRAMEWORK = {
@@ -99,12 +103,14 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+# ----------------------------------------------------------------------------------
 
 # ------------------- Настройки время жизни и обновления токена --------------------
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
+# ----------------------------------------------------------------------------------
 
 LANGUAGE_CODE = 'en-us'
 
@@ -115,3 +121,25 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+
+TG_BOT_TOKEN = os.getenv('TG_BOT_TOKEN')
+
+# ------------------- Настройки Celery --------------------
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+
+CELERY_TIMEZONE = TIME_ZONE
+# CELERY_TASK_TRACK_STARTED = True
+
+# Лимит времени на выполнение задачи (в секундах)
+CELERY_TASK_TIME_LIMIT = 10 * 60
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+CELERY_BEAT_SCHEDULE = {
+    'send-habit-reminders-every-minute': {
+        'task': 'habits.tasks.send_habit_reminders',
+        'schedule': crontab(),  # каждую минуту
+    },
+}
+# ---------------------------------------------------------
