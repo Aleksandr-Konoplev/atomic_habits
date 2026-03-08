@@ -1,13 +1,10 @@
+from rest_framework.generics import (CreateAPIView, DestroyAPIView,
+                                     ListAPIView, RetrieveAPIView,
+                                     UpdateAPIView)
+
 from users.models import User
-from users.serializers import UserSerializer
 from users.paginators import UsersPaginator
-from rest_framework.generics import (
-    CreateAPIView,
-    ListAPIView,
-    RetrieveAPIView,
-    UpdateAPIView,
-    DestroyAPIView,
-)
+from users.serializers import UserSerializer
 
 
 class UserCreateAPIView(CreateAPIView):
