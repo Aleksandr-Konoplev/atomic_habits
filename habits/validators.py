@@ -12,7 +12,9 @@ class DurationValidator:
         duration = attrs.get(self.field)
 
         if duration is not None and duration > self.max_duration:
-            raise ValidationError(f'Продолжительность действия привычки не должна превышать {self.max_duration} секунд.')
+            raise ValidationError(
+                f'Продолжительность действия привычки не должна превышать {self.max_duration} секунд.'
+            )
         return attrs
 
 

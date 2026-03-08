@@ -1,12 +1,3 @@
-# from celery import shared_task
-# from habits.services import send_message_to_tg
-#
-#
-# @shared_task
-# def task_habit_create(chat_id, message):
-#     send_message_to_tg(chat_id=chat_id, message=message)
-
-
 from celery import shared_task
 from django.utils import timezone
 
@@ -22,10 +13,7 @@ def send_habit_reminders():
 
     now = timezone.localtime()
 
-    habits = Habit.objects.filter(
-        time__hour=now.hour,
-        time__minute=now.minute
-    )
+    habits = Habit.objects.filter(time__hour=now.hour, time__minute=now.minute)
 
     for habit in habits:
 
@@ -36,7 +24,4 @@ def send_habit_reminders():
 
         message = f'Напоминание!Привычка: {habit.action} Место: {habit.place}'
 
-        send_message_to_tg(
-            chat_id=user.telegram_id,
-            message=message
-        )
+        send_message_to_tg(chat_id=user.telegram_id, message=message)

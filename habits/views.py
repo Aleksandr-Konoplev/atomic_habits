@@ -1,15 +1,12 @@
-from habits.models import Habit
-from habits.serializers import HabitSerializer
-from habits.paginators import HabitPaginator
-from users.permissions import IsOwner
 from django.db.models import Q
-from rest_framework.generics import (
-    CreateAPIView,
-    ListAPIView,
-    RetrieveAPIView,
-    UpdateAPIView,
-    DestroyAPIView,
-)
+from rest_framework.generics import (CreateAPIView, DestroyAPIView,
+                                     ListAPIView, RetrieveAPIView,
+                                     UpdateAPIView)
+
+from habits.models import Habit
+from habits.paginators import HabitPaginator
+from habits.serializers import HabitSerializer
+from users.permissions import IsOwner
 
 
 class HabitCreateAPIView(CreateAPIView):
