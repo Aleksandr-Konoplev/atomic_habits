@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework_simplejwt',
     'django_celery_beat',
+    'corsheaders',
     # My app
     'users',
     'habits',
@@ -41,6 +42,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -124,7 +126,7 @@ STATIC_URL = 'static/'
 
 TG_BOT_TOKEN = os.getenv('TG_BOT_TOKEN')
 
-# ------------------- Настройки Celery --------------------
+# ------------------------------- Настройки Celery ---------------------------------
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
 CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
 
@@ -134,12 +136,28 @@ CELERY_TIMEZONE = TIME_ZONE
 # Лимит времени на выполнение задачи (в секундах)
 CELERY_TASK_TIME_LIMIT = 10 * 60
 
+# Класс планировщика, который использует Celery Beat для периодических задач
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
+# Вызов задач
 CELERY_BEAT_SCHEDULE = {
     'send-habit-reminders-every-minute': {
         'task': 'habits.tasks.send_habit_reminders',
         'schedule': crontab(),  # каждую минуту
     },
 }
-# ---------------------------------------------------------
+# ----------------------------------------------------------------------------------
+
+# -------------------------------- Настройки Cors ----------------------------------
+# Адреса разрешённых фронтенд-серверов
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8000',
+]
+
+# Разрешённые адреса не блокируемые CSRF-защитой (фронт и бэк)
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000',
+]
+
+CORS_ALLOW_ALL_ORIGINS = False
+# ----------------------------------------------------------------------------------
