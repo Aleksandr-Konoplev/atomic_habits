@@ -1,6 +1,8 @@
 from datetime import timedelta
 from pathlib import Path
 import os
+
+from celery.schedules import crontab
 from dotenv import load_dotenv
 
 
@@ -120,11 +122,22 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+TG_BOT_TOKEN = os.getenv('TG_BOT_TOKEN')
+
 # ------------------- Настройки Celery --------------------
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
 CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
 
-# CELERY_TIMEZONE = TIME_ZONE
+CELERY_TIMEZONE = TIME_ZONE
 # CELERY_TASK_TRACK_STARTED = True
 # CELERY_TASK_TIME_LIMIT = 30 * 60
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+CELERY_BEAT_SCHEDULE = {
+    'send-habit-reminders-every-minute': {
+        'task': 'habits.tasks.send_habit_reminders',
+        'schedule': crontab(),  # каждую минуту
+    },
+}
 # ---------------------------------------------------------

@@ -6,7 +6,7 @@ from rest_framework.exceptions import ValidationError
 class Habit(models.Model):
     """Модель привычки"""
 
-    owner = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='Пользователь')
+    owner = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='Владелец', related_name='habit')
 
     place = models.CharField(max_length=255, verbose_name='Место действия привычки', blank=True, null=True)
 
